@@ -1,0 +1,7 @@
+Chủ đề: Cửa hàng bán điện thoại
+
+Capstone được hoàn thành bởi 01 cá nhân, do partern không làm
+
+Hồ Mỹ Hân: 
+	+ Phần 1: Tạo website bán điện thoại. Phần 2: Quản trị
+	+ Có responsive, animation
