@@ -146,9 +146,33 @@ function mapProductList(local) {
 
 //   DELETE PRODUCT
 
+// LẤY DỮ LIỆU TỪ LOCALHOST 
+function getProductCartList() {
+  var productListJson = localStorage.getItem("PL");
+  if (!productListJson) return [];
+  // console.log(JSON.parse(productListJson));
+  return JSON.parse(productListJson);
+}
+var cart  = getProductCartList();
+console.log(cart);
+
+function saveProductCartList() {
+  var productListJson = JSON.stringify(cart);
+  console.log(cart);
+  localStorage.setItem("PL", productListJson);
+}
+
 async function deleteProduct(id) {
   var res = await productServices.deleteProduct(id);
+  for (var i = 0; i < cart.length; i++) {
+    if(id*1 === cart[i].product.id*1){
+      cart.splice(i, 1);
+    }
+    
+  }
+  
   fetchProductList();
+  saveProductCartList();
 }
 
 //update
@@ -276,6 +300,9 @@ function updateProduct() {
     .catch(function (err) {
       console.log(err);
     });
+
+  //update lại sp trong giỏ hàng của người dùng, nếu admin sửa thông tin sp
+  
 }
 
 function required(val, config) {
@@ -369,8 +396,19 @@ function checkValid() {
   // var valid = validId && validName;
   return valid;
 }
-
+function mapProductCartList(local) {
+  var result = [];
+  for (var i = 0; i < local.length; i++) {
+    var oldCart = local[i];
+    var newCartItem = new CartItem(oldCart.product, oldCart.quantity);
+    result.push(newCartItem);
+  }
+  
+  return result;
+}
 window.onload = async function () {
   await fetchProductList();
+  var productListFromLocal = getProductCartList();
+  cart = mapProductCartList(productListFromLocal);
   console.log(productList);
 };
